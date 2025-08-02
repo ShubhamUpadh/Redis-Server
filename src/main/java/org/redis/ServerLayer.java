@@ -7,16 +7,35 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ServerLayer {
-    private int port;
+    private final int port;
+    private ServerSocket serverSocket;
     private static final Logger logger = Logger.getLogger(ServerLayer.class.getName());
     public ServerLayer(int port = 1234){
         this.port = port;
     }
 
     public void startServer() throws IOException {
-        ServerSocket serverSocket = new ServerSocket(port);
+        serverSocket = new ServerSocket(port);
         logger.log(Level.INFO ,"Server is up and listening on port " + port);
-        Socket clientSocket = serverSocket.accept();
-        logger.log(Level.INFO, "Client connected");
+
+        while (true){
+            try{
+                Socket clientSocket = serverSocket.accept();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            logger.log(Level.INFO, "Client connected" + clientSocket.getInetAddress());
+            new Thread(() ->{
+                try{
+                    handleClient(clientSocket);
+                }
+                catch (Exception e){
+                    logger.log(Level.WARNING, "Not able to create thread for " +
+                            clientSocket.getInetAddress() + "\t" + e.getMessage());
+                }
+            }).start();
+        }
     }
+
+
 }
