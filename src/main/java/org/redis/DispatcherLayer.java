@@ -1,9 +1,9 @@
 package org.redis;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DispatcherLayer {
-    private HashMap<String, String> map;
+    private ConcurrentHashMap<String, String> map;
 
     public DispatcherLayer(){
         map = new HashMap<>();

@@ -6,11 +6,11 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ServerLayer {
+public class NetworkLayer {
     private final int port;
     private ServerSocket serverSocket;
-    private static final Logger logger = Logger.getLogger(ServerLayer.class.getName());
-    public ServerLayer(int port = 1234){
+    private static final Logger logger = Logger.getLogger(NetworkLayer.class.getName());
+    public NetworkLayer(int port = 1234){
         this.port = port;
     }
 
@@ -19,8 +19,9 @@ public class ServerLayer {
         logger.log(Level.INFO ,"Server is up and listening on port " + port);
 
         while (true){
+            Socket clientSocket = null;
             try{
-                Socket clientSocket = serverSocket.accept();
+                clientSocket = serverSocket.accept();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -35,6 +36,10 @@ public class ServerLayer {
                 }
             }).start();
         }
+    }
+
+    private void handleClient(Socket clientSocket){
+        Buffered inputStream =
     }
 
 
