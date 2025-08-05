@@ -1,8 +1,12 @@
 package org.redis;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,8 +42,21 @@ public class NetworkLayer {
         }
     }
 
-    private void handleClient(Socket clientSocket){
-        Buffered inputStream =
+    private void handleClient(Socket clientSocket) throws IOException {
+        InputStream inputStream = clientSocket.getInputStream();
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+        byte[] buffer = new byte[1024];
+        int bytesRead = 0;
+        StringBuilder serializedString = new StringBuilder();
+        while ((bytesRead = bufferedInputStream.read(buffer)) != -1){
+            String received = new String(buffer,0 , bytesRead);
+            serializedString.append(received);
+        }
+        Object deserializedObject = RespParser.deserialize(serializedString.toString());
+        System.out.println(deserializedObject);
+
+
+
     }
 
 
