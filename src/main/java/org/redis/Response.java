@@ -1,14 +1,27 @@
 package org.redis;
 
 public class Response {
-    private final Status status;
     private final String response;
-    public Response(Status status, String response){
-        this.status = status;
+    private final boolean failed;
+
+    public Response(String response, boolean failed) {
         this.response = response;
+        this.failed = failed;
     }
 
-    public boolean isFailed(){
-        return (status == Status.GET_FAILED) || (status == Status.SET_FAILED);
+    public static Response success(String response) {
+        return new Response(response, false);
+    }
+
+    public static Response failure(String errorMessage) {
+        return new Response(errorMessage, true);
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public boolean isFailed() {
+        return failed;
     }
 }

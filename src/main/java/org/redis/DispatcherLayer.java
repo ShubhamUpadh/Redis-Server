@@ -6,7 +6,7 @@ public class DispatcherLayer {
     private ConcurrentHashMap<String, String> map;
 
     public DispatcherLayer(){
-        map = new HashMap<>();
+        map = new ConcurrentHashMap<>();
     }
 
     public Response handleMessage(Request input){
